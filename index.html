@@ -73,7 +73,7 @@
         </ul>
 
         <!-- Bookmarklet Button -->
-        <a id="bookmarklet" href="javascript:(function(){ const title = document.querySelector('meta[property=%22og:title%22]')?.content || document.title || 'Untitled'; const author = document.querySelector('meta[name=%22author%22]')?.content || 'Author Unknown'; const siteName = document.querySelector('meta[property=%22og:site_name%22]')?.content || window.location.hostname; const pubDate = document.querySelector('meta[property=%22article:published_time%22]')?.content; const year = pubDate ? new Date(pubDate).getFullYear() : 'n.d.'; const url = window.location.href; const citation = `${author}. *${title}*. ${siteName}, ${year}. URL: ${url}`; prompt('MLA Citation', citation); })();">Drag me</a>
+        <a id="bookmarklet" href="javascript:(function(){ const title = document.querySelector('meta[property=%22og:title%22]')?.content || document.title || 'Untitled'; const author = document.querySelector('meta[name=%22author%22]')?.content || 'Author Unknown'; const siteName = document.querySelector('meta[property=%22og:site_name%22]')?.content || window.location.hostname; const pubDate = document.querySelector('meta[property=%22article:published_time%22]')?.content; const year = pubDate ? new Date(pubDate).getFullYear() : 'n.d.'; const url = window.location.href; const citation = `${author}. *${title}*. ${siteName}, ${year}. URL: ${url}`; prompt('MLA Citation', citation); })();">Find MLA</a>
 
         <!-- Preview Button -->
         <button onclick="openPreview()">Try it in a Preview</button>
