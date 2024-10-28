@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sam's Citation Tool</title>
+    <title>Automatic MLA Citation Bookmarklet with Firebase</title>
     <link rel="stylesheet" href="style.css">
     <style>
         body {
@@ -73,13 +73,69 @@
         </ul>
 
         <!-- Bookmarklet Button -->
-        <a id="bookmarklet" href="javascript:(function(){ const title = document.querySelector('meta[property=%22og:title%22]')?.content || document.title || 'Untitled'; const author = document.querySelector('meta[name=%22author%22]')?.content || 'Author Unknown'; const siteName = document.querySelector('meta[property=%22og:site_name%22]')?.content || window.location.hostname; const pubDate = document.querySelector('meta[property=%22article:published_time%22]')?.content; const year = pubDate ? new Date(pubDate).getFullYear() : 'n.d.'; const url = window.location.href; const citation = `${author}. *${title}*. ${siteName}, ${year}. URL: ${url}`; prompt('MLA Citation', citation); })();">Find MLA</a>
+        <a id="bookmarklet" href="javascript:(function(){ const title = document.querySelector('meta[property=%22og:title%22]')?.content || document.title || 'Untitled'; const author = document.querySelector('meta[name=%22author%22]')?.content || 'Author Unknown'; const siteName = document.querySelector('meta[property=%22og:site_name%22]')?.content || window.location.hostname; const pubDate = document.querySelector('meta[property=%22article:published_time%22]')?.content; const year = pubDate ? new Date(pubDate).getFullYear() : 'n.d.'; const url = window.location.href; const citation = `${author}. *${title}*. ${siteName}, ${year}. URL: ${url}`; prompt('MLA Citation', citation); const userToken = localStorage.getItem('userToken'); if (userToken) { const db = firebase.firestore(); db.collection('Users').doc(userToken).collection('Citations').add({ title: title, author: author, siteName: siteName, year: year, url: url, citation: citation }); }}();">Drag me</a>
 
         <!-- Preview Button -->
         <button onclick="openPreview()">Try it in a Preview</button>
     </div>
 
-    <script>
+    <!-- Firebase Scripts -->
+    <script type="module">
+        // Import the Firebase SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        import { getFirestore, doc, setDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCth57ssDI-FPIg1N2FvhU5VX-stuXcg0o",
+            authDomain: "spellingleader.firebaseapp.com",
+            projectId: "spellingleader",
+            storageBucket: "spellingleader.appspot.com",
+            messagingSenderId: "13842471534",
+            appId: "1:13842471534:web:c69ded6a3d61cde933a47f"
+        };
+
+        // Initialize Firebase and Firestore
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Function to generate a 15-character alphanumeric token
+        function generateToken(length = 15) {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let token = '';
+            for (let i = 0; i < length; i++) {
+                token += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return token;
+        }
+
+        // Function to check if token exists, otherwise create one and store in Firestore
+        async function initializeUserToken() {
+            let userToken = localStorage.getItem('userToken');
+            if (!userToken) {
+                userToken = generateToken();
+                localStorage.setItem('userToken', userToken);
+
+                // Add user token to Firestore under 'Users' collection
+                try {
+                    await setDoc(doc(db, "Users", userToken), {
+                        createdAt: new Date().toISOString(),
+                        premium: false,
+                        beta: false
+                    });
+                    console.log("User token saved to Firestore:", userToken);
+                } catch (error) {
+                    console.error("Error saving user token to Firestore:", error);
+                }
+            } else {
+                console.log("User token already exists:", userToken);
+            }
+        }
+
+        // Initialize token when the page loads
+        window.addEventListener('load', initializeUserToken);
+
+        // Preview function for the button
         function openPreview() {
             const previewWindow = window.open('about:blank', '_blank');
             previewWindow.document.write(`
@@ -93,8 +149,6 @@
                         h2 { color: #333; }
                         p { font-size: 1.1em; color: #666; }
                     </style>
-                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8739942460911283"
-     crossorigin="anonymous"></script>
                 </head>
                 <body>
                     <h2>MLA Citation Preview</h2>
