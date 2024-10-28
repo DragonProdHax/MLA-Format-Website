@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLA Format Citation Tool</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>MLA Format Citation Tool</h1>
+    </header>
+    <main>
+        <form id="citation-form">
+            <h2>Enter Citation Details</h2>
+            <label for="author">Author:</label>
+            <input type="text" id="author" placeholder="Last Name, First Name" required>
+
+            <label for="title">Title of Source:</label>
+            <input type="text" id="title" required>
+
+            <label for="container-title">Container Title (e.g., book, website):</label>
+            <input type="text" id="container-title" required>
+
+            <label for="publisher">Publisher:</label>
+            <input type="text" id="publisher" required>
+
+            <label for="year">Year of Publication:</label>
+            <input type="text" id="year" required>
+
+            <button type="submit">Generate Citation</button>
+        </form>
+
+        <div id="citation-output">
+            <h2>Generated Citation</h2>
+            <p id="citation-text"></p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Citation Tool</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
