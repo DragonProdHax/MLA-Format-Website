@@ -3,44 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MLA Format Citation Tool</title>
+    <title>Sam's Citation Tool</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        .container {
+            max-width: 500px;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        #bookmarklet {
+            display: inline-block;
+            margin: 20px 0;
+            padding: 10px 20px;
+            font-size: 1.1em;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        #bookmarklet:hover {
+            background: #0056b3;
+        }
+        button {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .instructions {
+            text-align: left;
+            font-size: 1em;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>MLA Format Citation Tool</h1>
-    </header>
-    <main>
-        <form id="citation-form">
-            <h2>Enter Citation Details</h2>
-            <label for="author">Author:</label>
-            <input type="text" id="author" placeholder="Last Name, First Name" required>
+    <div class="container">
+        <h1>Automatic MLA Citation Tool</h1>
+        <p class="instructions">To use the citation tool:</p>
+        <ul class="instructions">
+            <li>Drag the button below to your bookmarks bar.</li>
+            <li>Click the bookmark whenever you’re on a page you want to cite.</li>
+            <li>A prompt will appear with the MLA citation ready to copy.</li>
+        </ul>
 
-            <label for="title">Title of Source:</label>
-            <input type="text" id="title" required>
+        <!-- Bookmarklet Button -->
+        <a id="bookmarklet" href="javascript:(function(){ const title = document.querySelector('meta[property=%22og:title%22]')?.content || document.title || 'Untitled'; const author = document.querySelector('meta[name=%22author%22]')?.content || 'Author Unknown'; const siteName = document.querySelector('meta[property=%22og:site_name%22]')?.content || window.location.hostname; const pubDate = document.querySelector('meta[property=%22article:published_time%22]')?.content; const year = pubDate ? new Date(pubDate).getFullYear() : 'n.d.'; const url = window.location.href; const citation = `${author}. *${title}*. ${siteName}, ${year}. URL: ${url}`; prompt('MLA Citation', citation); })();">Drag me</a>
 
-            <label for="container-title">Container Title (e.g., book, website):</label>
-            <input type="text" id="container-title" required>
+        <!-- Preview Button -->
+        <button onclick="openPreview()">Try it in a Preview</button>
+    </div>
 
-            <label for="publisher">Publisher:</label>
-            <input type="text" id="publisher" required>
-
-            <label for="year">Year of Publication:</label>
-            <input type="text" id="year" required>
-
-            <button type="submit">Generate Citation</button>
-        </form>
-
-        <div id="citation-output">
-            <h2>Generated Citation</h2>
-            <p id="citation-text"></p>
-        </div>
-    </main>
-
-    <footer>
-        <p>&copy; 2024 Citation Tool</p>
-    </footer>
-
-    <script src="script.js"></script>
+    <script>
+        function openPreview() {
+            const previewWindow = window.open('about:blank', '_blank');
+            previewWindow.document.write(`
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>MLA Citation Preview</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 20px; }
+                        h2 { color: #333; }
+                        p { font-size: 1.1em; color: #666; }
+                    </style>
+                </head>
+                <body>
+                    <h2>MLA Citation Preview</h2>
+                    <p>Visit a real webpage and click the "Drag me" bookmark to test it fully!</p>
+                </body>
+                </html>
+            `);
+        }
+    </script>
 </body>
 </html>
